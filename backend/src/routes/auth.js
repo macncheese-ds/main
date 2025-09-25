@@ -10,7 +10,7 @@ router.post('/login', async (req, res) => {
   const { usuario, password } = req.body;
   if (!usuario || !password) return res.status(400).json({ message: 'Usuario y contraseña requeridos' });
   try {
-    const [rows] = await pool.query('SELECT * FROM usuarios WHERE usuario = ?', [usuario]);
+  const [rows] = await pool.query('SELECT * FROM users WHERE usuario = ?', [usuario]);
     if (!rows.length) return res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
     const user = rows[0];
     const valid = await bcrypt.compare(password, user.password);

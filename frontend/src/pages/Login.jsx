@@ -1,41 +1,51 @@
+// Diseño adaptado desde inventario/frontend/src/pages/Login.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
+import api, { setAuthToken } from '../api.js';
 
-function Login({ setUser }) {
-  const [usuario, setUsuario] = useState('');
-  const [password, setPassword] = useState('');
+export default function Login({ setUser }) {
+  const [username, setU] = useState('');
+  const [password, setP] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
+  async function submit(e) {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('/api/auth/login', { usuario, password });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      setUser(res.data.user);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Error de autenticación');
+      const { data } = await api.post('/auth/login', { usuario: username, password: password });
+      localStorage.setItem('token', data.token);
+      setAuthToken(data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      if (setUser) setUser(data.user);
+      else window.location.href = '/';
+    } catch (e) {
+      setError(e.response?.data?.message || 'Usuario o contraseña incorrectos');
     }
-  };
+  }
 
   return (
-    <div style={{ maxWidth: 350, margin: '100px auto', padding: 24, border: '1px solid #ccc', borderRadius: 8 }}>
-      <h2>Iniciar sesión</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Usuario</label>
-          <input value={usuario} onChange={e => setUsuario(e.target.value)} required />
+    <div className="min-h-screen grid place-items-center bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+      <form onSubmit={submit} className="w-full max-w-sm bg-white border rounded-2xl p-6 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <h1 className="text-xl font-semibold mb-4">Iniciar sesión</h1>
+        <div className="space-y-3">
+          <input
+            className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
+            placeholder="Usuario"
+            value={username}
+            onChange={e => setU(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            className="w-full border rounded-lg px-3 py-2 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-gray-100"
+            placeholder="Contraseña"
+            value={password}
+            onChange={e => setP(e.target.value)}
+            required
+          />
+          {error && <div className="text-red-600 text-sm dark:text-red-400">{error}</div>}
+          <button className="w-full bg-gray-900 text-white rounded-lg px-3 py-2 dark:bg-gray-100 dark:text-gray-900">Entrar</button>
         </div>
-        <div>
-          <label>Contraseña</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
-        </div>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        <button type="submit">Entrar</button>
       </form>
     </div>
   );
 }
-
-export default Login;
