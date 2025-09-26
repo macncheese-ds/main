@@ -21,8 +21,9 @@ async function addAdmin() {
   }
 
   try {
-    const [result] = await pool.query('INSERT INTO users (nombre, usuario, num_empleado, password, rol) VALUES (?, ?, ?, ?, ?)',
-      [nombre, usuario, num_empleado, hashed, 'admin']);
+    // store hash into VARBINARY column `pass_hash`
+    const [result] = await pool.query('INSERT INTO users (nombre, usuario, num_empleado, pass_hash, rol) VALUES (?, ?, ?, ?, ?)',
+      [nombre, usuario, num_empleado, Buffer.from(hashed), 'admin']);
     console.log('Admin creado con id', result.insertId);
     process.exit(0);
   } catch (err) {
