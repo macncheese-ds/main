@@ -12,7 +12,7 @@ export const createUser = async (req, res) => {
 
     // Only allow requests coming from the configured frontend origin (browser)
     const origin = req.headers.origin;
-    const allowedOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+  const allowedOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:9001';
     if (origin && origin !== allowedOrigin) {
       return res.status(403).json({ message: 'Origen no permitido' });
     }
