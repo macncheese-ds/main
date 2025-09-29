@@ -17,8 +17,7 @@ router.post('/login', async (req, res) => {
     const hash = user.pass_hash instanceof Buffer ? user.pass_hash.toString() : user.pass_hash;
     const valid = await bcrypt.compare(password, hash);
     if (!valid) return res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
-  const audience = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
-  const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '8h', audience });
+    const token = jwt.sign({ id: user.id, rol: user.rol }, process.env.JWT_SECRET, { expiresIn: '8h' });
     res.json({ token, user: { id: user.id, nombre: user.nombre, usuario: user.usuario, num_empleado: user.num_empleado, rol: user.rol } });
   } catch (err) {
     res.status(500).json({ message: 'Error en el servidor' });

@@ -8,9 +8,7 @@ import usersRouter from './routes/users.js';
 dotenv.config();
 
 const app = express();
-// Allow only the configured frontend origin (helps browsers enforce same-origin)
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:9001';
-app.use(cors({ origin: FRONTEND_ORIGIN }));
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);

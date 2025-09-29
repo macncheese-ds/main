@@ -10,13 +10,6 @@ export const createUser = async (req, res) => {
       return res.status(403).json({ message: 'Permisos insuficientes' });
     }
 
-    // Only allow requests coming from the configured frontend origin (browser)
-    const origin = req.headers.origin;
-  const allowedOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:9001';
-    if (origin && origin !== allowedOrigin) {
-      return res.status(403).json({ message: 'Origen no permitido' });
-    }
-
     const { nombre, usuario, num_empleado, password, rol } = req.body;
     if (!nombre || !usuario || !password || !rol) {
       return res.status(400).json({ message: 'Faltan campos requeridos' });

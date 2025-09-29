@@ -6,10 +6,7 @@ export const authMiddleware = async (req, res, next) => {
   if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ message: 'Token requerido' });
   const token = auth.split(' ')[1];
   try {
-    const opts = {};
-    const expectedAud = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
-    if (expectedAud) opts.audience = expectedAud;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET, opts);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (err) {
