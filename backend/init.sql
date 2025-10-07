@@ -2,11 +2,10 @@ CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
   usuario VARCHAR(50)  UNIQUE,
-  num_empleado INT UNIQUE,
+  num_empleado VARCHAR(50),
   pass_hash VARBINARY(60) NOT NULL,
-  rol ENUM('The Goat','admin','operador','invitado') NOT NULL
+  rol ENUM('The Goat','Administrador','Soporte','Lider','Operador','Invitado') NOT NULL
 );
-
 
 CREATE TABLE IF NOT EXISTS apps (
   id INT AUTO_INCREMENT PRIMARY KEY,
